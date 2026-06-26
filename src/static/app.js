@@ -17,15 +17,16 @@ document.addEventListener("DOMContentLoaded", () => {
         activityCard.className = "activity-card";
 
         const spotsLeft = details.max_participants - details.participants.length;
-        const participants = details.participants || [];
-        const participantsMarkup = participants.length
-          ? `<ul class="participants-list">${participants
+        const participantsMarkup = (details.participants || []).length
+          ? `<ul class="participants-list">${(details.participants || [])
               .map(
                 (participant) => `
                   <li class="participant-item">
                     <span>${participant}</span>
                     <button type="button" class="remove-participant" data-activity="${name}" data-email="${participant}" aria-label="Remove ${participant} from ${name}">
-                      🗑️
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                        <path fill="currentColor" d="M9 3h6l1 2h4v2H4V5h4l1-2zm-2 6h2v9H7V9zm4 0h2v9h-2V9zm4 0h2v9h-2V9z"/>
+                      </svg>
                     </button>
                   </li>
                 `
