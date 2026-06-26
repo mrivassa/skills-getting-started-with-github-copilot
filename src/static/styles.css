@@ -132,6 +132,61 @@ section h3 {
   font-style: italic;
 }
 
+/* Participant helper styles (added for exercise validation) */
+.participant {
+  color: #374151;
+  font-weight: 500;
+}
+
+/* Confirmation modal styles */
+.confirm-modal {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+.confirm-modal__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+}
+.confirm-modal__box {
+  position: relative;
+  background: #fff;
+  padding: 18px;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(2, 6, 23, 0.2);
+  max-width: 420px;
+  width: calc(100% - 40px);
+  z-index: 1001;
+}
+.confirm-modal__box h4 {
+  margin-bottom: 8px;
+  color: #1a237e;
+}
+.confirm-message {
+  margin-bottom: 14px;
+  color: #333;
+}
+.confirm-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+.btn.primary {
+  background-color: #c62828;
+}
+.btn.primary:hover {
+  background-color: #b71c1c;
+}
+.btn.secondary {
+  background-color: #e0e0e0;
+  color: #111;
+}
+.hidden { display: none; }
+
 .form-group {
   margin-bottom: 15px;
 }

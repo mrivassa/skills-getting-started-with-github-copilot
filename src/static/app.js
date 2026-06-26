@@ -3,6 +3,49 @@ document.addEventListener("DOMContentLoaded", () => {
   const activitySelect = document.getElementById("activity");
   const signupForm = document.getElementById("signup-form");
   const messageDiv = document.getElementById("message");
+  const confirmModal = document.getElementById("confirm-modal");
+  const confirmMessage = confirmModal && confirmModal.querySelector(".confirm-message");
+  const confirmOk = confirmModal && document.getElementById("confirm-ok");
+  const confirmCancel = confirmModal && document.getElementById("confirm-cancel");
+
+  // Utility to show an in-page confirmation modal. Returns a Promise<boolean>.
+  function showConfirmModal(message) {
+    if (!confirmModal) {
+      return Promise.resolve(window.confirm(message));
+    }
+
+    return new Promise((resolve) => {
+      confirmMessage.textContent = message;
+      confirmModal.classList.remove("hidden");
+
+      const cleanup = () => {
+        confirmModal.classList.add("hidden");
+        confirmOk.removeEventListener("click", onOk);
+        confirmCancel.removeEventListener("click", onCancel);
+        document.removeEventListener("keydown", onKey);
+        confirmModal.querySelector('[data-dismiss="overlay"]').removeEventListener('click', onCancel);
+      };
+
+      const onOk = () => {
+        cleanup();
+        resolve(true);
+      };
+
+      const onCancel = () => {
+        cleanup();
+        resolve(false);
+      };
+
+      const onKey = (e) => {
+        if (e.key === "Escape") onCancel();
+      };
+
+      confirmOk.addEventListener("click", onOk);
+      confirmCancel.addEventListener("click", onCancel);
+      document.addEventListener("keydown", onKey);
+      confirmModal.querySelector('[data-dismiss="overlay"]').addEventListener('click', onCancel);
+    });
+  }
 
   async function refreshActivities() {
     try {
@@ -59,6 +102,9 @@ document.addEventListener("DOMContentLoaded", () => {
           const activityName = button.dataset.activity;
           const email = button.dataset.email;
 
+          const confirmed = await showConfirmModal(`Remove ${email} from ${activityName}?`);
+          if (!confirmed) return;
+
           try {
             const response = await fetch(
               `/activities/${encodeURIComponent(activityName)}/participants/${encodeURIComponent(email)}`,
@@ -68,10 +114,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
             if (response.ok) {
               messageDiv.textContent = result.message;
-              messageDiv.className = "success";
+              messageDiv.className = "message success";
             } else {
               messageDiv.textContent = result.detail || "Could not remove participant";
-              messageDiv.className = "error";
+              messageDiv.className = "message error";
             }
 
             messageDiv.classList.remove("hidden");
@@ -82,7 +128,7 @@ document.addEventListener("DOMContentLoaded", () => {
             await refreshActivities();
           } catch (error) {
             messageDiv.textContent = "Failed to remove participant.";
-            messageDiv.className = "error";
+            messageDiv.className = "message error";
             messageDiv.classList.remove("hidden");
             console.error("Error removing participant:", error);
           }
