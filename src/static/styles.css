@@ -199,7 +199,70 @@ button:hover {
 }
 
 .hidden {
-  display: none;
+  display: none !important;
+}
+
+.participant-item {
+  color: #374151;
+}
+
+.confirm-modal {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: 1000;
+}
+
+.confirm-modal__box {
+  width: min(420px, calc(100% - 32px));
+  background: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.2);
+}
+
+.confirm-modal__box h4 {
+  margin-bottom: 12px;
+  color: #1a237e;
+}
+
+.confirm-message {
+  margin-bottom: 16px;
+  color: #333;
+}
+
+.confirm-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.confirm-actions .btn {
+  border: none;
+  border-radius: 6px;
+  padding: 10px 14px;
+  cursor: pointer;
+}
+
+.btn.primary {
+  background-color: #c62828;
+  color: #fff;
+}
+
+.btn.secondary {
+  background-color: #e0e0e0;
+  color: #111;
+}
+
+.btn.primary:hover {
+  background-color: #b71c1c;
+}
+
+.btn.secondary:hover {
+  background-color: #cfcfcf;
 }
 
 footer {

@@ -3,6 +3,56 @@ document.addEventListener("DOMContentLoaded", () => {
   const activitySelect = document.getElementById("activity");
   const signupForm = document.getElementById("signup-form");
   const messageDiv = document.getElementById("message");
+  const confirmModal = document.getElementById("confirm-modal");
+  const confirmMessage = confirmModal?.querySelector(".confirm-message");
+  const confirmOk = document.getElementById("confirm-ok");
+  const confirmCancel = document.getElementById("confirm-cancel");
+
+  function showConfirmModal(message) {
+    if (!confirmModal || !confirmMessage || !confirmOk || !confirmCancel) {
+      return Promise.resolve(window.confirm(message));
+    }
+
+    return new Promise((resolve) => {
+      confirmMessage.textContent = message;
+      confirmModal.classList.remove("hidden");
+
+      const cleanup = () => {
+        confirmModal.classList.add("hidden");
+        confirmOk.removeEventListener("click", confirm);
+        confirmCancel.removeEventListener("click", cancel);
+        confirmModal.removeEventListener("click", overlayClick);
+        document.removeEventListener("keydown", escapeKey);
+      };
+
+      const confirm = () => {
+        cleanup();
+        resolve(true);
+      };
+
+      const cancel = () => {
+        cleanup();
+        resolve(false);
+      };
+
+      const escapeKey = (event) => {
+        if (event.key === "Escape") {
+          cancel();
+        }
+      };
+
+      const overlayClick = (event) => {
+        if (event.target === confirmModal) {
+          cancel();
+        }
+      };
+
+      confirmOk.addEventListener("click", confirm);
+      confirmCancel.addEventListener("click", cancel);
+      confirmModal.addEventListener("click", overlayClick);
+      document.addEventListener("keydown", escapeKey);
+    });
+  }
 
   // Function to fetch activities from API
   async function fetchActivities() {
@@ -23,9 +73,10 @@ document.addEventListener("DOMContentLoaded", () => {
         const activityCard = document.createElement("div");
         activityCard.className = "activity-card";
 
-        const spotsLeft = details.max_participants - details.participants.length;
+        const participants = Array.isArray(details.participants) ? details.participants : [];
+        const spotsLeft = details.max_participants - participants.length;
 
-        const participantsList = details.participants
+        const participantsList = participants
           .map(participant => `
             <li class="participant-item">
               <span>${participant}</span>
@@ -108,7 +159,8 @@ document.addEventListener("DOMContentLoaded", () => {
       const activity = event.target.getAttribute("data-activity");
       const email = event.target.getAttribute("data-email");
 
-      if (!confirm(`Remove ${email} from ${activity}?`)) {
+      const confirmed = await showConfirmModal(`Remove ${email} from ${activity}?`);
+      if (!confirmed) {
         return;
       }
 
