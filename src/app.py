@@ -124,4 +124,10 @@ def unregister_from_activity(activity_name: str, email: str):
     # Remove student
     activity["participants"].remove(email)
     return {"message": f"Removed {email} from {activity_name}"}
+
+
+@app.delete("/activities/{activity_name}/participants/{email}")
+def unregister_from_activity_by_path(activity_name: str, email: str):
+    """Backward-compatible delete route for older frontend versions."""
+    return unregister_from_activity(activity_name, email)
  
