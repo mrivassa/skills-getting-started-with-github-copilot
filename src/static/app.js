@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!confirmModal) {
       return Promise.resolve(window.confirm(message));
     }
-
+    
     return new Promise((resolve) => {
       confirmMessage.textContent = message;
       confirmModal.classList.remove("hidden");
