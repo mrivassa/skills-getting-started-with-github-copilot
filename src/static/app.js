@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   async function refreshActivities() {
     try {
-      const response = await fetch("/activities");
+      const response = await fetch(`/activities?_=${Date.now()}`);
       const activities = await response.json();
 
       activitiesList.innerHTML = "";
