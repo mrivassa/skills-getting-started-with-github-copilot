@@ -16,9 +16,10 @@ document.addEventListener("DOMContentLoaded", () => {
         const activityCard = document.createElement("div");
         activityCard.className = "activity-card";
 
-        const spotsLeft = details.max_participants - details.participants.length;
-        const participantsMarkup = (details.participants || []).length
-          ? `<ul class="participants-list">${(details.participants || [])
+        const participants = details.participants || [];
+        const spotsLeft = details.max_participants - participants.length;
+        const participantsMarkup = participants.length
+          ? `<ul class="participants-list">${participants
               .map(
                 (participant) => `
                   <li class="participant-item">
